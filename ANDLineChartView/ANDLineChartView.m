@@ -28,21 +28,7 @@
 
 @implementation ANDLineChartView
 
-- (instancetype)initWithFrame:(CGRect)frame{
-  self = [super initWithFrame:frame];
-  if(self){
-    _scrollView = [[UIScrollView alloc] initWithFrame:CGRectZero];
-    _internalChartView = [[ANDInternalLineChartView alloc] initWithFrame:CGRectZero chartContainer:self];
-    _backgroundChartView = [[ANDBackgroundChartView alloc] initWithFrame:CGRectZero chartContainer:self];
-    
-    [_scrollView addSubview:_backgroundChartView];
-    [_scrollView addSubview:_internalChartView];
-    [self addSubview:_scrollView];
-    [self setupDefaultAppearence];
-    [self setupInitialConstraints];
-  }
-  return self;
-}
+https://github.com/IHNEL/ANDLineChartView.git
 
 - (void)setupDefaultAppearence{
   //set default colors,fonts etc.
