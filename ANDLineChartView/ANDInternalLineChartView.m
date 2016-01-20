@@ -57,6 +57,7 @@
         NSNumber* rowIndex = [layer valueForKey:@"rowIndex"];
         if (rowIndex) {
             self.selectedIndex = rowIndex.longValue;
+            [_graphLayer.sublayers makeObjectsPerformSelector:@selector(removeFromSuperlayer)];
             [self reloadData];
             if ([self.chartContainer.delegate respondsToSelector:@selector(chartView:didSelectItemAtRow:)]) {
                 [self.chartContainer.delegate chartView:self.chartContainer didSelectItemAtRow:rowIndex.longValue];
@@ -129,8 +130,9 @@
   [_graphLayer setStrokeColor:[[self.chartContainer lineColor] CGColor]];
 
   CGPoint lastPoint = CGPointMake(0, 0);
+    BOOL isUpdatePosition = _graphLayer.sublayers.count >= numberOfPoints;
   [CATransaction begin];
-    [_graphLayer.sublayers makeObjectsPerformSelector:@selector(removeFromSuperlayer)];
+    
   for(NSUInteger i = 0; i<numberOfPoints;i++){
     CGFloat value = [self.chartContainer valueForElementAtRow:i];
     CGFloat minGridValue = [self.chartContainer minValue];
@@ -148,7 +150,7 @@
     lastPoint = newPosition;
     
     //animate position change
-    if(_animationNeeded){
+    if(_animationNeeded && isUpdatePosition){
       CABasicAnimation *positionAnimation = [CABasicAnimation animationWithKeyPath:@"position"];
       positionAnimation.duration = [self.chartContainer animationDuration];
       positionAnimation.fromValue = [NSValue valueWithCGPoint:oldPosition];

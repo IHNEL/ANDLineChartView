@@ -32,7 +32,7 @@
   [_chartView setTranslatesAutoresizingMaskIntoConstraints:NO];
   [_chartView setDataSource:self];
   [_chartView setDelegate:self];
-
+    _chartView.usingAnimation = YES;
   [_chartView setAnimationDuration:0.4];
   [self.view addSubview:_chartView];
   _elements = [self arrayWithRandomNumbers];
@@ -63,9 +63,9 @@
   __weak ANDExampleViewController *weakSelf = self;
   __weak ANDLineChartView *weakChartView = _chartView;
   dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//    _elements = [weakSelf arrayWithRandomNumbers];
-//    [weakChartView reloadData];
-//    [weakSelf randomizeElements];
+    _elements = [weakSelf arrayWithRandomNumbers];
+    [weakChartView reloadData];
+    [weakSelf randomizeElements];
   });
 }
 
