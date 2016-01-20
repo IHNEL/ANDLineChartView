@@ -28,7 +28,40 @@
 
 @implementation ANDLineChartView
 
-https://github.com/IHNEL/ANDLineChartView.git
+- (instancetype)initWithCoder:(NSCoder *)coder
+{
+    self = [super initWithCoder:coder];
+    if (self) {
+        [self setUp];
+    }
+    return self;
+}
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        [self setUp];
+    }
+    return self;
+}
+- (instancetype)initWithFrame:(CGRect)frame{
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self setUp];
+    }
+    return self;
+}
+- (void) setUp{
+    _scrollView = [[UIScrollView alloc] initWithFrame:CGRectZero];
+    _internalChartView = [[ANDInternalLineChartView alloc] initWithFrame:CGRectZero chartContainer:self];
+    _backgroundChartView = [[ANDBackgroundChartView alloc] initWithFrame:CGRectZero chartContainer:self];
+    
+    [_scrollView addSubview:_backgroundChartView];
+    [_scrollView addSubview:_internalChartView];
+    [self addSubview:_scrollView];
+    [self setupDefaultAppearence];
+    [self setupInitialConstraints];
+}
 
 - (void)setupDefaultAppearence{
   //set default colors,fonts etc.
