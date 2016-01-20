@@ -20,6 +20,9 @@
 
 @property (nonatomic, strong) UIColor *elementFillColor; // default is [UIColor colorWithRed:0.39 green:0.38 blue:0.67 alpha:1.0]
 @property (nonatomic, strong) UIColor *elementStrokeColor; // default is [UIColor colorWithRed:1 green:1 blue:1 alpha:1]
+@property (nonatomic, strong) UIColor *selectedElementFillColor;
+@property (nonatomic, strong) UIColor *selectedElementStrokeColor;
+@property (nonatomic) BOOL  usingAnimation; //animation during update graph layer.
 @property (nonatomic, strong) UIColor *lineColor; // default is [UIColor colorWithRed:1 green:1 blue:1 alpha:1]
 
 @property (nonatomic, assign) CGFloat elementSpacing; //default is 30
@@ -65,5 +68,5 @@
 // from left border of view.
 // if you want to have the same spacing between every element, use elementSpacing property from ANDGraphView
 - (CGFloat)chartView:(ANDLineChartView *)chartView spacingForElementAtRow:(NSUInteger)row;
-
+- (void) chartView:(ANDLineChartView*) chartView didSelectItemAtRow:(NSUInteger) row;
 @end

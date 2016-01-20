@@ -55,7 +55,7 @@
     _scrollView = [[UIScrollView alloc] initWithFrame:CGRectZero];
     _internalChartView = [[ANDInternalLineChartView alloc] initWithFrame:CGRectZero chartContainer:self];
     _backgroundChartView = [[ANDBackgroundChartView alloc] initWithFrame:CGRectZero chartContainer:self];
-    
+    self.usingAnimation = NO;
     [_scrollView addSubview:_backgroundChartView];
     [_scrollView addSubview:_internalChartView];
     [self addSubview:_scrollView];
@@ -70,6 +70,8 @@
   [self setLineColor:[UIColor colorWithRed:1 green:1 blue:1 alpha:1]];
   [self setElementFillColor:[self chartBackgroundColor]];
   [self setElementStrokeColor:[UIColor colorWithRed:1 green:1 blue:1 alpha:1]];
+    [self setSelectedElementFillColor:[UIColor orangeColor]];
+    [self setSelectedElementStrokeColor:[UIColor redColor]];
   [self setGridIntervalLinesColor:[UIColor colorWithRed:0.325 green:0.314 blue:0.627 alpha:1.000]];
   [self setGridIntervalFontColor:[UIColor colorWithRed:0.216 green:0.204 blue:0.478 alpha:1.000]];
   
@@ -234,4 +236,8 @@
   }
 }
 
+- (void) setUsingAnimation:(BOOL)usingAnimation{
+    _usingAnimation = usingAnimation;
+    _internalChartView.animationNeeded = _usingAnimation;
+}
 @end

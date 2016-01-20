@@ -13,7 +13,7 @@
 #define INTERVAL_TEXT_LEFT_MARGIN 10.0
 #define INTERVAL_TEXT_MAX_WIDTH 100.0
 
-#define CIRCLE_SIZE 14.0
+#define CIRCLE_SIZE 17
 
 @implementation ANDInternalLineChartView{
   CAShapeLayer *_graphLayer;
@@ -24,7 +24,7 @@
 
   CGFloat _maxValue;
   CGFloat _minValue;
-  BOOL _animationNeeded;
+
 }
 
 - (instancetype)initWithFrame:(CGRect)frame{
@@ -41,9 +41,29 @@
     [self setBackgroundColor:[UIColor clearColor]];
     [self setOpaque:NO];
   }
-  return self;
+    UITapGestureRecognizer *singleFingerTap =
+    [[UITapGestureRecognizer alloc] initWithTarget:self
+                                            action:@selector(handleSingleTap:)];
+    [self addGestureRecognizer:singleFingerTap];
+    self.selectedIndex = 0;//[self.chartContainer.dataSource numberOfElementsInChartView:self.chartContainer] - 1;
+    return self;
 }
-
+//Handle user touch event
+- (void)handleSingleTap:(UITapGestureRecognizer *)recognizer {
+    CGPoint location = [recognizer locationInView:[recognizer.view superview]];
+    
+    CALayer* layer = [self.layer hitTest:location];
+    if (layer) {
+        NSNumber* rowIndex = [layer valueForKey:@"rowIndex"];
+        if (rowIndex) {
+            self.selectedIndex = rowIndex.longValue;
+            [self reloadData];
+            if ([self.chartContainer.delegate respondsToSelector:@selector(chartView:didSelectItemAtRow:)]) {
+                [self.chartContainer.delegate chartView:self.chartContainer didSelectItemAtRow:rowIndex.longValue];
+            }
+        }
+    }
+}
 - (void)setupGraphLayer{
   _graphLayer = [CAShapeLayer layer];
   [_graphLayer setFrame:[self bounds]];
@@ -53,6 +73,7 @@
   [_graphLayer setLineWidth:2.0f];
   [_graphLayer setLineJoin:kCALineJoinBevel];
   [[self layer] addSublayer:_graphLayer];
+
 }
 
 - (void)setupGradientLayer{
@@ -77,7 +98,6 @@
 }
 
 - (void)reloadData{
-  _animationNeeded = YES;
   NSUInteger numberOfPoints = [self.chartContainer numberOfElements];
   if(numberOfPoints != _numberOfPreviousElements){
     [self invalidateIntrinsicContentSize];
@@ -110,6 +130,7 @@
 
   CGPoint lastPoint = CGPointMake(0, 0);
   [CATransaction begin];
+    [_graphLayer.sublayers makeObjectsPerformSelector:@selector(removeFromSuperlayer)];
   for(NSUInteger i = 0; i<numberOfPoints;i++){
     CGFloat value = [self.chartContainer valueForElementAtRow:i];
     CGFloat minGridValue = [self.chartContainer minValue];
@@ -217,27 +238,38 @@
 - (CALayer*)circleLayerForPointAtRow:(NSUInteger)row{
   NSUInteger totalNumberOfCircles = [[_graphLayer sublayers] count];
   if(row >=  totalNumberOfCircles){
-    CALayer *circleLayer = [self newCircleLayer];
+    CALayer *circleLayer = [self newCircleLayerForPointAtRow:row];
+      [circleLayer setValue:[NSNumber numberWithLong:row] forKey:@"rowIndex"];
+      
     [_graphLayer addSublayer:circleLayer];
-  }
+}
 
   return [_graphLayer sublayers][row];
 }
 
-- (CALayer*)newCircleLayer{
+- (CALayer*)newCircleLayerForPointAtRow:(NSUInteger) row{
   CALayer *newCircleLayer = [CALayer layer];
-  UIImage *img = [self circleImage];
+  UIImage *img = [self circleImageForPointAtRow:row];
   [newCircleLayer setContents:(id)img.CGImage];
-  [newCircleLayer setFrame:CGRectMake(0, 0, img.size.width, img.size.height)];
+  [newCircleLayer setFrame:CGRectMake(0,0, img.size.width,img.size.height)];
   [newCircleLayer setGeometryFlipped:YES];
+
   return newCircleLayer;
 }
 
-- (UIImage*)circleImage{
-  if(!_circleImage){
+- (UIImage*)circleImageForPointAtRow:(NSUInteger) row{
+//  if(!_circleImage){
     CGSize imageSize = CGSizeMake(CIRCLE_SIZE, CIRCLE_SIZE);
     CGFloat strokeWidth = 2;
-    
+      UIColor* fillColor = [self.chartContainer elementFillColor];
+      UIColor* strokeColor = [self.chartContainer elementStrokeColor];
+      
+      if (self.selectedIndex == row) {
+          fillColor = [self.chartContainer selectedElementFillColor];
+          strokeColor = [self.chartContainer selectedElementStrokeColor];
+      }
+  
+      
     UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);//[UIImage imageNamed:@"circle"];
     CGContextRef context = UIGraphicsGetCurrentContext();
     
@@ -247,17 +279,18 @@
     UIBezierPath* ovalPath = [UIBezierPath bezierPathWithOvalInRect: (CGRect){CGPointMake(strokeWidth/2.0, strokeWidth/2.0),
                                                                     CGSizeMake(CIRCLE_SIZE-strokeWidth, CIRCLE_SIZE-strokeWidth)}];
     CGContextSaveGState(context);
-    [[self.chartContainer elementFillColor] setFill];
+      
+    [fillColor setFill];
     [ovalPath fill];
     CGContextRestoreGState(context);
     
-    [[self.chartContainer elementStrokeColor] setStroke];
+    [strokeColor setStroke];
     [ovalPath setLineWidth:strokeWidth];
     [ovalPath stroke];
     
     _circleImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-  }
+//  }
   return _circleImage;
 }
 

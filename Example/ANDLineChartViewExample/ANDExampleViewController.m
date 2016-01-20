@@ -32,6 +32,7 @@
   [_chartView setTranslatesAutoresizingMaskIntoConstraints:NO];
   [_chartView setDataSource:self];
   [_chartView setDelegate:self];
+
   [_chartView setAnimationDuration:0.4];
   [self.view addSubview:_chartView];
   _elements = [self arrayWithRandomNumbers];
@@ -62,9 +63,9 @@
   __weak ANDExampleViewController *weakSelf = self;
   __weak ANDLineChartView *weakChartView = _chartView;
   dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-    _elements = [weakSelf arrayWithRandomNumbers];
-    [weakChartView reloadData];
-    [weakSelf randomizeElements];
+//    _elements = [weakSelf arrayWithRandomNumbers];
+//    [weakChartView reloadData];
+//    [weakSelf randomizeElements];
   });
 }
 
@@ -117,4 +118,7 @@
   return (row == 0) ? 60.0 : 30.0;
 }
 
+- (void)chartView:(ANDLineChartView *)chartView didSelectItemAtRow:(NSUInteger)row{
+    NSLog(@"Callback when user touch:%ld",row);
+}
 @end
