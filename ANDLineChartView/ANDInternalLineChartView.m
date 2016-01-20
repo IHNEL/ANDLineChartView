@@ -45,7 +45,7 @@
     [[UITapGestureRecognizer alloc] initWithTarget:self
                                             action:@selector(handleSingleTap:)];
     [self addGestureRecognizer:singleFingerTap];
-    self.selectedIndex = 0;//[self.chartContainer.dataSource numberOfElementsInChartView:self.chartContainer] - 1;
+    self.selectedIndex = [self.chartContainer.dataSource numberOfElementsInChartView:self.chartContainer] - 1;
     return self;
 }
 //Handle user touch event
