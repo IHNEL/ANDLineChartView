@@ -125,7 +125,10 @@
         //Scroll to view the last item as default
         UIScrollView* scrollView = self.chartContainer.scrollView;
         CGPoint point = CGPointMake(scrollView.contentSize.width - scrollView.bounds.size.width,0);
-        [scrollView setContentOffset:point animated:NO];
+        if (point.x > scrollView.contentSize.width) {
+            [scrollView setContentOffset:point animated:NO];            
+        }
+
     }
   UIBezierPath *path = [UIBezierPath bezierPath];
   [path moveToPoint:CGPointMake(0.0, 0.0)];
