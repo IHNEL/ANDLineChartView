@@ -13,7 +13,7 @@
 #define INTERVAL_TEXT_LEFT_MARGIN 10.0
 #define INTERVAL_TEXT_MAX_WIDTH 100.0
 
-#define CIRCLE_SIZE 17
+
 
 @implementation ANDInternalLineChartView{
   CAShapeLayer *_graphLayer;
@@ -308,6 +308,8 @@
   
   width += [[self circleImage] size].width;
   if(width < [self preferredMinLayoutWidth]) width = [self preferredMinLayoutWidth];
+    //Add space at right side to more sexy UI :)
+    width += [self.chartContainer spacingForElementAtRow:0];
   return CGSizeMake(width, UIViewNoIntrinsicMetric);
 }
 

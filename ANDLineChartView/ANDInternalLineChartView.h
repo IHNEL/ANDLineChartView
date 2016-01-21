@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 @class ANDLineChartView;
-
+#define CIRCLE_SIZE 17
 @interface ANDInternalLineChartView : UIView
 
 @property (nonatomic, weak) ANDLineChartView *chartContainer;

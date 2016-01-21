@@ -162,7 +162,7 @@
   if(_delegate && [_delegate respondsToSelector:@selector(chartView:spacingForElementAtRow:)]){
     CGFloat newSpacing = [_delegate chartView:self spacingForElementAtRow:row];
     NSAssert(newSpacing > 0, @"Spacing cannot be smaller than 0.0");
-    CGSize imageSize = [_internalChartView.circleImage size];
+    CGSize imageSize = CGSizeMake(CIRCLE_SIZE, CIRCLE_SIZE);
     newSpacing += (row == 0)
     ? imageSize.width/2.0
     : imageSize.width;
