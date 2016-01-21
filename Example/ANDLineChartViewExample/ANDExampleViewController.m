@@ -88,7 +88,7 @@
 #pragma mark - ANDLineChartViewDataSource methods
 
 - (NSUInteger)numberOfElementsInChartView:(ANDLineChartView *)graphView{
-  return _numbersCount;
+  return 4;
 }
 
 - (CGFloat)chartView:(ANDLineChartView *)graphView valueForElementAtRow:(NSUInteger)row{

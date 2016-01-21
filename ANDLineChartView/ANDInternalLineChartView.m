@@ -125,7 +125,7 @@
         //Scroll to view the last item as default
         UIScrollView* scrollView = self.chartContainer.scrollView;
         CGPoint point = CGPointMake(scrollView.contentSize.width - scrollView.bounds.size.width,0);
-        if (point.x > scrollView.contentSize.width) {
+        if (point.x >= self.chartContainer.bounds.size.width) {
             [scrollView setContentOffset:point animated:NO];            
         }
 
