@@ -19,7 +19,7 @@
 // If nonzero, this is used when determining -intrinsicContentSize
 @property(nonatomic, assign) CGFloat preferredMinLayoutWidth;
 @property(nonatomic)  BOOL animationNeeded;
-@property NSUInteger selectedIndex;
+@property NSInteger selectedIndex;
 - (instancetype)initWithFrame:(CGRect)frame chartContainer:(ANDLineChartView*)chartContainer;
 - (void)reloadData;
 @end

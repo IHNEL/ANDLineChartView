@@ -45,7 +45,7 @@
     [[UITapGestureRecognizer alloc] initWithTarget:self
                                             action:@selector(handleSingleTap:)];
     [self addGestureRecognizer:singleFingerTap];
-    self.selectedIndex = [self.chartContainer.dataSource numberOfElementsInChartView:self.chartContainer] - 1;
+    self.selectedIndex = -1;
     return self;
 }
 //Handle user touch event
@@ -113,12 +113,20 @@
   [_gradientLayer setFrame:[self bounds]];
 
   [self refreshGraphLayer];
+ 
 }
 
 - (void)refreshGraphLayer{
   if([self.chartContainer numberOfElements] == 0)
     return;
-
+    if (self.selectedIndex <0) {
+        //select the last point as default.
+        self.selectedIndex = [self.chartContainer numberOfElements] - 1;
+        //Scroll to view the last item as default
+        UIScrollView* scrollView = self.chartContainer.scrollView;
+        CGPoint point = CGPointMake(scrollView.contentSize.width - scrollView.bounds.size.width,0);
+        [scrollView setContentOffset:point animated:NO];
+    }
   UIBezierPath *path = [UIBezierPath bezierPath];
   [path moveToPoint:CGPointMake(0.0, 0.0)];
   NSUInteger numberOfPoints = [self.chartContainer numberOfElements];
